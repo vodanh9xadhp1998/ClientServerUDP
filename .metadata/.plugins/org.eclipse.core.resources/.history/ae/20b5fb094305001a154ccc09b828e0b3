@@ -1,0 +1,79 @@
+package DownLoad;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import java.awt.Font;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class Server {
+
+	private JFrame frmServer;
+	private JTextField txtPort;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Server window = new Server();
+					window.frmServer.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Server() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frmServer = new JFrame();
+		frmServer.setTitle("Server");
+		frmServer.setBounds(100, 100, 450, 300);
+		frmServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmServer.getContentPane().setLayout(null);
+		
+		JButton btnStart = new JButton("Start");
+		btnStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				TCPServer tcpServer = new TCPServer();
+		        tcpServer.open();
+		        tcpServer.start();
+			}
+		});
+		btnStart.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnStart.setBounds(258, 21, 89, 23);
+		frmServer.getContentPane().add(btnStart);
+		
+		txtPort = new JTextField();
+		txtPort.setBounds(80, 23, 154, 20);
+		frmServer.getContentPane().add(txtPort);
+		txtPort.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("Port:");
+		lblNewLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		lblNewLabel.setBounds(43, 26, 46, 14);
+		frmServer.getContentPane().add(lblNewLabel);
+		
+		JTextArea txtDisplay = new JTextArea();
+		txtDisplay.setBounds(10, 55, 414, 195);
+		frmServer.getContentPane().add(txtDisplay);
+	}
+}

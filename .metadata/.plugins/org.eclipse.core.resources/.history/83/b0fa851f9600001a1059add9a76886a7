@@ -1,0 +1,57 @@
+package FileServer;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Client {
+    public final static String SERVER_IP = "localhost";
+    public final static int SERVER_PORT = 9999;
+    public static void InputData(ArrayList<Student> students) {
+		int n;
+		Scanner sc = new Scanner(System.in);
+		do {
+			System.out.print("Ban co muon nhap them khong sinh vien khong..?\n(1)Co\n(0)Khong\nMoi ban chon: ");
+			n = sc.nextInt();
+			if (n == 1) 
+			{
+				Student student = new Student();
+				student.InputStudent();
+				students.add(student);
+			}
+		} while (n != 0);
+	}
+    public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException{
+    	ArrayList<Student> students = new ArrayList<Student>();
+    	InputData(students);
+    	//Socket cho client
+        Socket socket = null;
+        try {
+            socket = new Socket(SERVER_IP, SERVER_PORT); 
+            System.out.println("Connected: " + socket);
+            ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
+            ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream());
+            for(Student k:students)
+            {
+            	os.writeObject(k);
+            }
+            int dem =0 ;
+            while(dem<5)
+            {
+	            Student i = new Student();
+	            i =	(Student) is.readObject();
+	            i.OutputStudent();
+	            dem = dem+1;
+            }
+        } catch (IOException ie) {
+            System.out.println("Can't connect to server");
+        } finally {
+            if (socket != null) {
+                socket.close();
+            }
+        }
+    }
+}

@@ -1,0 +1,86 @@
+package TransportFile;
+import java.net.*;
+import java.io.*;
+
+public class Transport implements Runnable {
+
+    private Socket socket;
+    private BufferedReader in = null;
+
+    public Transport(Socket s) {
+        this.socket = s;
+    }
+
+    @Override
+    public void run() {
+        try {
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            String choose;
+            while ((choose = in.readLine()) != null) {
+                switch (choose) {
+                    case "1":
+                        UpLoadFile();
+                        break;
+                    case "2":
+                        String outGoingFileName;
+                        while ((outGoingFileName = in.readLine()) != null) {
+                            DownLoadFile(outGoingFileName);
+                        }
+                        break;
+                    case "0":
+                        System.exit(1);
+                        break;
+                    default:
+                        System.out.println("Ban chon sai yeu cau");
+                        break;
+                }
+
+            }
+
+        } 
+        catch (IOException ex) 
+        {
+        	System.out.print("File not Found..");
+        }
+    }
+
+    public void UpLoadFile() {
+        try {
+            int bytesRead;
+            DataInputStream dis = new DataInputStream(socket.getInputStream());
+            String fileName = dis.readUTF();
+            OutputStream output = new FileOutputStream(fileName);
+            long size = dis.readLong();
+            byte[] buffer = new byte[1024];
+            while (size > 0 && (bytesRead = dis.read(buffer, 0, (int) Math.min(buffer.length, size))) != -1) {
+                output.write(buffer, 0, bytesRead);
+                size -= bytesRead;
+            }
+            output.close();
+            dis.close();
+            System.out.println("UpLoad File "+fileName+" for Client.");
+        } catch (IOException ex) {
+            System.err.println("File Error..!");
+        }
+    }
+
+    public void DownLoadFile(String fileName) {
+        try {
+            File myFile = new File(fileName);
+            byte[] n = new byte[(int) myFile.length()];
+            FileInputStream fis = new FileInputStream(myFile);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            DataInputStream dis = new DataInputStream(bis);
+            dis.readFully(n, 0, n.length);
+            OutputStream os = socket.getOutputStream();
+            DataOutputStream dos = new DataOutputStream(os);
+            dos.writeUTF(myFile.getName());
+            dos.writeLong(n.length);
+            dos.write(n, 0, n.length);
+            dos.flush();
+            System.out.println(" DownLoad File "+fileName+" to Client Success..!");
+        } catch (Exception e) {
+            System.err.println("File not Found");
+        }
+    }
+}

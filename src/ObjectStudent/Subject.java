@@ -1,0 +1,36 @@
+package ObjectStudent;
+
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Subject implements Serializable {
+	private String nameSubject;
+	private float mark;
+
+	public Subject(String tenSB, float diem) {
+		this.setNameSubject(tenSB);
+		this.setMark(diem);
+	}
+
+	public String getNameSubject() {
+		return nameSubject;
+	}
+
+	public void setNameSubject(String nameSubject) {
+		this.nameSubject = nameSubject;
+	}
+
+	public float getMark() {
+		return mark;
+	}
+
+	public void setMark(float mark) {
+		this.mark = mark;
+	}
+
+	public void OutputSubject() {
+		System.out.print("Subject: " + this.nameSubject + "\t");
+	}
+
+}
+

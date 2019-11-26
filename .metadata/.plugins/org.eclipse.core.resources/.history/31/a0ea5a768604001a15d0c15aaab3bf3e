@@ -1,0 +1,117 @@
+package DownLoad;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
+import javax.swing.JLabel;
+
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class UpdateAndDownload {
+
+	private JFrame frame;
+	private JTextField txtHost;
+	private JTextField txtPort;
+	private JTextField txtPath;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					UpdateAndDownload window = new UpdateAndDownload();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public UpdateAndDownload() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 530, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setBounds(10, 119, 493, 131);
+		frame.getContentPane().add(textArea);
+		
+		JLabel lblHost = new JLabel("Host:");
+		lblHost.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		lblHost.setBounds(10, 11, 57, 26);
+		frame.getContentPane().add(lblHost);
+		
+		txtHost = new JTextField();
+		txtHost.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		txtHost.setBounds(68, 15, 116, 20);
+		frame.getContentPane().add(txtHost);
+		txtHost.setColumns(10);
+		
+		JLabel lbPort = new JLabel("Port:");
+		lbPort.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		lbPort.setBounds(216, 11, 57, 26);
+		frame.getContentPane().add(lbPort);
+		
+		txtPort = new JTextField();
+		txtPort.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		txtPort.setColumns(10);
+		txtPort.setBounds(274, 15, 116, 20);
+		frame.getContentPane().add(txtPort);
+		
+		txtPath = new JTextField();
+		txtPath.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		txtPath.setBounds(10, 46, 380, 20);
+		frame.getContentPane().add(txtPath);
+		txtPath.setColumns(10);
+		
+		JButton btnBrowse = new JButton("Browse\r\n");
+		btnBrowse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 final JFileChooser fc = new JFileChooser();
+			       fc.showOpenDialog(null);
+			        try {	
+			            if (fc.getSelectedFile() != null) {
+			                txtPath.setText(fc.getSelectedFile().getPath());
+			            }
+			        } catch (Exception e1) {
+			            e1.printStackTrace();
+			        }
+			}
+		});
+		btnBrowse.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnBrowse.setBounds(414, 14, 89, 52);
+		frame.getContentPane().add(btnBrowse);
+		
+		JButton btnSend = new JButton("Send");
+		btnSend.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(txtHost.getText().toString()=="")
+					textArea.setText("Thieu");
+			}
+		});
+		btnSend.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnSend.setBounds(10, 74, 89, 34);
+		frame.getContentPane().add(btnSend);
+	}
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Encapsulate field &apos;FileServer.Student.markavge&apos; in &apos;FileServer.Student&apos;&#x0D;&#x0A;- Original project: &apos;ClientServer&apos;&#x0D;&#x0A;- Original element: &apos;FileServer.Student.markavge&apos;&#x0D;&#x0A;- Getter method name: &apos;getMarkavge&apos;&#x0D;&#x0A;- Setter method name: &apos;setMarkavge&apos;&#x0D;&#x0A;- Field visibility: &apos;public&apos;&#x0D;&#x0A;- Use getter and setter methods in declaring type" comments="false" declaring="true" description="Encapsulate field &apos;markavge&apos;" flags="589830" getter="getMarkavge" id="org.eclipse.jdt.ui.self.encapsulate" input="/src&lt;FileServer{Student.java[Student^markavge" insertion="9" setter="setMarkavge" stamp="1572614470702" version="1.0" visibility="1"/>
+</session>

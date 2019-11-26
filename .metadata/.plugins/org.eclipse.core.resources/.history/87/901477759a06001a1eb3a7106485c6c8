@@ -1,0 +1,100 @@
+package TransportFile;
+
+import java.net.*;
+import java.io.*;
+import java.util.*;
+import java.util.logging.Logger;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+import java.awt.Font;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class Server {
+
+	private JFrame frmServer;
+	/**
+	 * Launch the application.
+	 */
+	private static ServerSocket serverSocket;
+    private static Socket socket = null;
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Server window = new Server();
+					window.frmServer.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Server() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frmServer = new JFrame();
+		frmServer.setTitle("Server");
+		frmServer.setBounds(100, 100, 450, 300);
+		frmServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmServer.getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Port :");
+		lblNewLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		lblNewLabel.setBounds(87, 25, 46, 26);
+		frmServer.getContentPane().add(lblNewLabel);
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		textArea.setBounds(10, 60, 414, 190);
+		frmServer.getContentPane().add(textArea);
+		
+		JButton btnStart = new JButton("Start");
+		btnStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+		            serverSocket = new ServerSocket(9999);
+		            textArea.append("Waiting for Client...");
+		        } catch (Exception e1) {
+		            System.exit(1);
+		        }
+				 while (true) 
+				 {
+			            try {
+			                socket = serverSocket.accept();
+			                System.out.println("Client accept: " + socket);
+
+			                Thread t = new Thread(new Transport(socket,textArea));
+
+			                t.start();
+
+			            } catch (Exception e1) {
+			                System.err.println("Error Connection...");
+			            }
+			        }
+			}
+		});
+		btnStart.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnStart.setBounds(228, 23, 89, 30);
+		frmServer.getContentPane().add(btnStart);
+		
+		JLabel lblNewLabel_1 = new JLabel("9999");
+		lblNewLabel_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		lblNewLabel_1.setBounds(125, 28, 65, 20);
+		frmServer.getContentPane().add(lblNewLabel_1);
+	}
+}

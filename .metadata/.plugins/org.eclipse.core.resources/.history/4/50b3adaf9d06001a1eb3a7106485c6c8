@@ -1,0 +1,94 @@
+package TransportFile;
+import java.net.*;
+import java.io.*;
+import javax.swing.JTextArea;
+
+public class Transport implements Runnable {
+
+    private Socket s;
+    private BufferedReader in = null;
+    private JTextArea textAreaLog;
+    public Transport(Socket client,JTextArea txt) {
+        this.s = client;
+        this.textAreaLog = txt;
+    }
+
+    @Override
+    public void run() {
+        try {
+            in = new BufferedReader(new InputStreamReader(
+                    s.getInputStream()));
+            String choose;
+            while ((choose = in.readLine()) != null) {
+                switch (choose) {
+                    case "1":
+                        UpLoadFile();
+                        continue;
+                    case "2":
+                        String outGoingFileName;
+                        while ((outGoingFileName = in.readLine()) != null) {
+                            DownLoadFile(outGoingFileName);
+                        }
+                        continue;
+                    default:
+                        textAreaLog.append("Khong co yeu cau nay..!");
+                        break;
+                }
+
+            }
+
+        } catch (IOException ex) {
+        	textAreaLog.append("Loi khong ket noi..!");
+        }
+    }
+
+    public void UpLoadFile() {
+        try {
+            int bytesRead;
+
+            DataInputStream dis = new DataInputStream(s.getInputStream());
+
+            String fileName = dis.readUTF();
+            OutputStream output = new FileOutputStream(fileName);
+            long size = dis.readLong();
+            byte[] buffer = new byte[1024];
+            while (size > 0 && (bytesRead = dis.read(buffer, 0, (int) Math.min(buffer.length, size))) != -1) {
+                output.write(buffer, 0, bytesRead);
+                size -= bytesRead;
+            }
+
+            output.close();
+            dis.close();
+
+            textAreaLog.append("UpLoad File success");
+        } catch (IOException ex) {
+        	textAreaLog.append("Error not search File");
+        }
+    }
+
+    public void DownLoadFile(String fileName) {
+        try {
+
+            File myFile = new File(fileName);
+            byte[] n = new byte[(int) myFile.length()];
+
+            FileInputStream fis = new FileInputStream(myFile);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+
+			DataInputStream dis = new DataInputStream(bis);
+            dis.readFully(n, 0, n.length);
+
+
+            OutputStream os = s.getOutputStream();
+
+            DataOutputStream dos = new DataOutputStream(os);
+            dos.writeUTF(myFile.getName());
+            dos.writeLong(n.length);
+            dos.write(n, 0, n.length);
+            dos.flush();
+            textAreaLog.append("DownLoad File success");
+        } catch (Exception e) {
+        	textAreaLog.append("Error not search File");
+        }
+    }
+}

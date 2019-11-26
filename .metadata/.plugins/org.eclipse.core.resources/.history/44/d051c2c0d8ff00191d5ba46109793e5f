@@ -1,0 +1,29 @@
+package FileServer;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.ArrayList;
+
+public class Client {
+    public final static String SERVER_IP = "127.0.0.1";
+    public final static int SERVER_PORT = 7;
+ 
+    public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException{
+        Socket socket = null;
+        try {
+            socket = new Socket(SERVER_IP, SERVER_PORT); // Connect to server
+            System.out.println("Connected: " + socket);
+            ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
+            Student i = (Student) is.readObject();
+            i.OutputStudent();
+        } catch (IOException ie) {
+            System.out.println("Can't connect to server");
+        } finally {
+            if (socket != null) {
+                socket.close();
+            }
+        }
+    }
+}
